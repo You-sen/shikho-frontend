@@ -94,3 +94,9 @@ export interface QuizSubmitResult {
   totalQuestions: number;
   percentage: number;
 }
+
+export interface QuestionInput {
+  questionText: string;
+  options: string[];
+  correctOptionIndex: number;
+}
