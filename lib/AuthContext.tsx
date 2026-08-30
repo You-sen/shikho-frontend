@@ -13,6 +13,11 @@ interface AuthContextType {
   logout: () => void;
 }
 
+interface LoginResponse {
+  jwt: string;
+  user: User;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -26,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     try {
-      const data = await apiFetch('/api/users/me?populate=role', { token });
+      const data = await apiFetch<User>('/api/users/me?populate=role', { token });
       setUser(data);
     } catch {
       clearToken();
@@ -37,34 +42,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-  let ignore = false;
+    let ignore = false;
 
-  async function load() {
-    const token = getToken();
-    if (!token) {
-      setLoading(false);
-      return;
+    async function load() {
+      const token = getToken();
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const data = await apiFetch<User>('/api/users/me?populate=role', { token });
+        if (!ignore) setUser(data);
+      } catch {
+        clearToken();
+        if (!ignore) setUser(null);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
     }
-    try {
-      const data = await apiFetch('/api/users/me?populate=role', { token });
-      if (!ignore) setUser(data);
-    } catch {
-      clearToken();
-      if (!ignore) setUser(null);
-    } finally {
-      if (!ignore) setLoading(false);
-    }
-  }
 
-  load();
+    load();
 
-  return () => {
-    ignore = true;
-  };
-}, []);
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   async function login(identifier: string, password: string) {
-    const data = await apiFetch('/api/auth/local', {
+    const data = await apiFetch<LoginResponse>('/api/auth/local', {
       method: 'POST',
       body: { identifier, password },
     });
@@ -73,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function register(username: string, email: string, password: string) {
-    const data = await apiFetch('/api/auth/local/register', {
+    const data = await apiFetch<LoginResponse>('/api/auth/local/register', {
       method: 'POST',
       body: { username, email, password },
     });
