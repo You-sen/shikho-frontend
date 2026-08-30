@@ -17,6 +17,8 @@ export default function Nav() {
             {user.role.name === 'Authenticated' && <Link href="/my-courses">My Courses</Link>}
             {(user.role.name === 'Instructor' || user.role.name === 'Content Manager') && <Link href="/staff/courses">Manage</Link>}
             {user.role.name === 'Platform Admin' && <Link href="/admin">Admin</Link>}
+            {(user.role.name === 'Instructor' || user.role.name === 'Content Manager') && <Link href="/staff/courses">Manage</Link>}
+            {user.role.name === 'Content Manager' && <Link href="/staff/blog">Blog</Link>}
             <button onClick={logout}>Logout</button>
           </>
         ) : (
