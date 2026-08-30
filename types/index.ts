@@ -48,3 +48,32 @@ export interface BlogPost {
   blogStatus: 'draft' | 'published';
   author: User;
 }
+
+export interface StrapiListResponse<T> {
+  data: T[];
+  meta: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export interface StrapiItemResponse<T> {
+  data: T;
+}
+
+export interface Enrollment {
+  id: number;
+  student: number;
+  course: Course;
+  enrolledAt: string;
+}
+
+export interface ProgressSummary {
+  completed: number;
+  total: number;
+  percentage: number;
+}
