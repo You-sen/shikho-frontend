@@ -77,3 +77,20 @@ export interface ProgressSummary {
   total: number;
   percentage: number;
 }
+
+export interface QuizAttempt {
+  id: number;
+  student: number;
+  quiz: number;
+  score: number;
+  totalQuestions: number;
+  answers: { questionId: number; selectedIndex: number }[];
+  submittedAt: string;
+}
+
+export interface QuizSubmitResult {
+  attemptId: number;
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+}
