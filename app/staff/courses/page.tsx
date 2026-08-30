@@ -18,9 +18,9 @@ function StaffCoursesContent() {
     }).then((res) => setCourses(res.data));
   }, []);
 
-  const isInstructor = user?.role.name === 'Instructor';
+  const isInstructor = user?.role?.name === 'Instructor';
   const visibleCourses = isInstructor
-    ? courses.filter((c) => c.owner.id === user?.id)
+    ? courses.filter((c) => c.owner?.id === user?.id)
     : courses;
 
   return (
