@@ -6,7 +6,14 @@ interface ApiOptions {
   token?: string;
 }
 
-export async function apiFetch(path: string, options: ApiOptions = {}) {
+interface StrapiError {
+  error?: { message?: string };
+}
+
+export async function apiFetch<T = unknown>(
+  path: string,
+  options: ApiOptions = {}
+): Promise<T> {
   const { method = 'GET', body, token } = options;
 
   const headers: Record<string, string> = {
@@ -24,8 +31,9 @@ export async function apiFetch(path: string, options: ApiOptions = {}) {
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data?.error?.message || 'Something went wrong');
+    const err = data as StrapiError;
+    throw new Error(err?.error?.message || 'Something went wrong');
   }
 
-  return data;
+  return data as T;
 }
