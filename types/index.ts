@@ -100,3 +100,17 @@ export interface QuestionInput {
   options: string[];
   correctOptionIndex: number;
 }
+
+export interface AdminStats {
+  totalUsers: number;
+  totalCourses: number;
+  totalEnrollments: number;
+  usersPerRole: Record<string, number>;
+}
+
+export interface StrapiUser {
+  id: number;
+  username: string;
+  email: string;
+  role: { id: number; name: string };
+}
